@@ -1,0 +1,72 @@
+import RPi.GPIO as IO		#Lets us use the GPIO stuff
+
+IO.setwarnings(False)		#Tells the Pi to ignore warnings?
+
+IO.setmode (IO.BCM)
+
+#1 is the first GPIO slot, change this for a different number for where its plugged in.
+IO.setup(1,IO.IN)		#GPIO 1 ->Front Sensor 
+IO.setup(2,IO.IN)		#GPIO 2 ->Front Sensor 
+IO.setup(3,IO.IN)		#GPIO 3 ->Front Sensor 
+IO.setup(4,IO.IN)		#GPIO 4 ->Front Sensor 
+IO.setup(5,IO.IN)		#GPIO 5 ->Front Sensor 
+IO.setup(6,IO.IN)		#GPIO 6 ->Front Sensor 
+IO.setup(7,IO.IN)		#GPIO 7 ->Front Sensor 
+IO.setup(8,IO.IN)		#GPIO 8 ->Front Sensor 
+
+print "All IOs set up. "
+
+SensorFrontLeft = IO.input(1)
+SensorFrontRight = IO.input(2)
+SensorRightFront = IO.input(3)
+SensorRightBack = IO.input(4)
+SensorBackRight = IO.input(5)
+SensorBackLeft = IO.input(6)
+SensorLeftBack = IO.input(7)
+SensorLeftFront = IO.input(8)
+
+print "All IOs equal something. "
+print "Who's ready to rumble? "
+
+
+try: 
+ if ((SensorFrontLeft==False) AND (SensorLeftFront==False)):
+   print "Object is on the Front Left corner. "
+   #Cant go forward or left 
+
+ elif ((SensorFrontRight==False) AND (SensorRightFront==False)):
+   print "Object is on the Front Right corner. "
+   #Cant go forward or right 
+
+ elif ((SensorRightBack==False) AND (SensorBackRight==False)):
+   print "Object is on the Back Right corner. "
+   #Cant go backwards or right
+
+ elif ((SensorBackLeft==False) AND (SensorLeftBack==False)):
+   print "Object is on the Back Left corner. "
+   #Cant go backwards or left
+
+ elif ((SensorFrontLeft==False) OR (SensorFrontRight==False)):
+   print "Object is in front. "
+   #Cant go forward
+
+ elif ((SensorRightFront==False) OR (SensorRightBack==False)):
+   print "Object is to the right. "
+   #Cant go right
+
+ elif ((SensorBackRight==False) OR (SensorBackLeft==False)):
+   print "Object is behind. "
+   #Cant go backwards
+
+ elif ((SensorLeftNack==False) OR (SensorLeftFront==False)):
+   print "Object is to the left. "
+   #Cant go left
+
+ else:
+   print "Nothing around, go crazy. "
+
+except KeyboardInterrupt:
+   GPIO.cleanup()
+
+
+
