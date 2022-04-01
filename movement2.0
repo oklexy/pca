@@ -1,0 +1,92 @@
+# Controlling the PCA: https://pypi.org/project/joycon-python/
+
+import RPi.GPIO as GPIO
+import time
+import sys
+from pyjoycon import ButtonEventJoyCon, get_R_id
+import pygame
+
+joycon_id = get_R_id()
+joycon = ButtonEventJoyCon(*joycon_id)
+
+# Setup of GPIO pin numbering type
+GPIO.setmode(GPIO.BOARD)
+GPIO.setwarnings(False)
+
+# Assign the pin numberings for the motors
+Motor_A1 = 21
+Motor_A2 = 26
+Motor_B1 = 19
+Motor_B2 = 24
+
+# Set the GPIO pins to be output in nature
+GPIO.setup(Motor_A1, GPIO.OUT)
+GPIO.setup(Motor_A2, GPIO.OUT)
+GPIO.setup(Motor_B1, GPIO.OUT)
+GPIO.setup(Motor_B2, GPIO.OUT)
+
+# Initiation time
+time.sleep(2)
+
+# Creating the different movement functions
+# Both motors moving forward
+
+def move_forward():    
+    GPIO.output(Motor_A1, 1)
+    GPIO.output(Motor_A2, 0)
+    GPIO.output(Motor_B1, 0)
+    GPIO.output(Motor_B2, 1)
+
+def move_backwards():
+    GPIO.output(Motor_A1, 0)
+    GPIO.output(Motor_A2, 1)
+    GPIO.output(Motor_B1, 1)
+    GPIO.output(Motor_B2, 0)
+
+def turn_right():
+    GPIO.output(Motor_A1, 1)
+    GPIO.output(Motor_A2, 0)
+
+def turn_left():
+    GPIO.output(Motor_B1, 0)
+    GPIO.output(Motor_B2, 1)
+
+# Both motors off
+def no_movement():
+    GPIO.output(Motor_A1, 0)
+    GPIO.output(Motor_A2, 0)
+    GPIO.output(Motor_B1, 0)
+    GPIO.output(Motor_B2, 0)
+
+def on_press():
+    try:
+        if pynput.keyboard.Listener(on_press=up, on_release=none):
+            move_forward()
+        elif pynput.keyboard.Listener(on_press=down, on_release=none):
+            move_backwads()
+        elif pynput.keyboard.Listener(on_press=right, on_release=none):
+            turn_right()
+        elif pynput.keyboard.Listener(on_press=left, on_release=none):
+            turn_left()
+        else:
+            no_movement()
+    except:
+        pass
+    
+##        KEY = key.char.lower()
+##        time.sleep(3)
+##        if KEY in ["w"]:
+##            move_forward()
+##        elif KEY in ["a"]:
+##            turn_left()
+##        elif KEY in ["s"]:
+##            move_backwards()
+##        elif KEY in ["d"]:
+##            turn_right()
+##        else:
+##            no_movement()
+##    except:
+##        pass
+
+on_press()
+GPIO.cleanup()
