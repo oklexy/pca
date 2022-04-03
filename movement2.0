@@ -33,8 +33,8 @@ time.sleep(2)
 
 def move_forward():    
     GPIO.output(Motor_A1, 1)
-    GPIO.output(Motor_A2, 0)
-    GPIO.output(Motor_B1, 0)
+    GPIO.output(Motor_A2, 1)
+    GPIO.output(Motor_B1, 1)
     GPIO.output(Motor_B2, 1)
 
 def move_backwards():
@@ -46,10 +46,14 @@ def move_backwards():
 def turn_right():
     GPIO.output(Motor_A1, 1)
     GPIO.output(Motor_A2, 0)
+    GPIO.output(Motor_B1, 1)
+    GPIO.output(Motor_B2, 0)
 
 def turn_left():
     GPIO.output(Motor_B1, 0)
     GPIO.output(Motor_B2, 1)
+    GPIO.output(Motor_B1, 1)
+    GPIO.output(Motor_B2, 0)
 
 # Both motors off
 def no_movement():
@@ -57,17 +61,30 @@ def no_movement():
     GPIO.output(Motor_A2, 0)
     GPIO.output(Motor_B1, 0)
     GPIO.output(Motor_B2, 0)
+    print ("not moving")
 
 def on_press():
     try:
-        if pynput.keyboard.Listener(on_press=up, on_release=none):
-            move_forward()
-        elif pynput.keyboard.Listener(on_press=down, on_release=none):
-            move_backwads()
-        elif pynput.keyboard.Listener(on_press=right, on_release=none):
-            turn_right()
-        elif pynput.keyboard.Listener(on_press=left, on_release=none):
-            turn_left()
+
+        if event.type == ecodes.EV_KEY:
+            if event.value == 1:
+                if event.code == BTN_B:
+                    print('X')
+                    move_forward()
+                    print ("going forward zoom zoom")
+                elif event.code == BTN_A:
+                    print('A')
+                    turn_right()
+                    print ("right turn zoom zoom")
+                elif event.code == BTN_C:
+                    print('B')
+                    move_backwads()
+                    print ("going backwards zoom zoom")
+                elif event.code == BTN_X:
+                    print('Y')
+                    turn_left()
+                    print ("left turn zoom zoom")
+      
         else:
             no_movement()
     except:
