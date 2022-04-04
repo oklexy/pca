@@ -1,13 +1,19 @@
-# Controlling the PCA: https://pypi.org/project/joycon-python/
-
+#Controlling the PCA: https://pypi.org/project/joycon-python/
 import RPi.GPIO as GPIO
 import time
 import sys
-from pyjoycon import ButtonEventJoyCon, get_R_id
-import pygame
 
-joycon_id = get_R_id()
-joycon = ButtonEventJoyCon(*joycon_id)
+from evdev import InputDevice, categorize, ecodes
+
+
+#creates object 'gamepad' to store the data
+gamepad = InputDevice('/dev/input/event8')
+
+#button code variables (PLEASE CHECK AND CHANGE WHAT IS WRITE AND WHAT ISNT)
+BTN_B = 305          #Actually the X Button
+BTN_A = 304          #Actually the A button
+BTN_C = 306          #Actually the B button
+BTN_X = 307          #Actually the Y button
 
 # Setup of GPIO pin numbering type
 GPIO.setmode(GPIO.BOARD)
@@ -61,34 +67,33 @@ def no_movement():
     GPIO.output(Motor_A2, 0)
     GPIO.output(Motor_B1, 0)
     GPIO.output(Motor_B2, 0)
-    print ("not moving")
-
-def on_press():
-    try:
-
-        if event.type == ecodes.EV_KEY:
-            if event.value == 1:
-                if event.code == BTN_B:
-                    print('X')
-                    move_forward()
-                    print ("going forward zoom zoom")
-                elif event.code == BTN_A:
-                    print('A')
-                    turn_right()
-                    print ("right turn zoom zoom")
-                elif event.code == BTN_C:
-                    print('B')
-                    move_backwads()
-                    print ("going backwards zoom zoom")
-                elif event.code == BTN_X:
-                    print('Y')
-                    turn_left()
-                    print ("left turn zoom zoom")
+    
+#def on_press():
+    #try:
+#Loop and filter by event code and print the mapped label
+for event in gamepad.read_loop():
+    if event.type == ecodes.EV_KEY:
+        if event.value == 1:
+            if event.code == BTN_B:
+                print('X')
+                move_forward()
+                print ("going forward zoom zoom")
+            elif event.code == BTN_A:
+                print('A')
+                turn_right()
+                print ("right turn zoom zoom")
+            elif event.code == BTN_C:
+                print('B')
+                move_backwards()
+                print ("going backwards zoom zoom")
+            elif event.code == BTN_X:
+                print('Y')
+                turn_left()
+                print ("left turn zoom zoom")                    
       
         else:
             no_movement()
-    except:
-        pass
+    
     
 ##        KEY = key.char.lower()
 ##        time.sleep(3)
